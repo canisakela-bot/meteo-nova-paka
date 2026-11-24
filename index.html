@@ -65,13 +65,13 @@ async function update() {
     const d = await response.json();
 
     document.getElementById("temp").textContent =
-      numberValue(d.teplota).toFixed(1) + " °C";
+      numberValue(d.temp).toFixed(1) + " °C";
     document.getElementById("hum").textContent =
       numberValue(d.hum).toFixed(0) + " %";
     document.getElementById("press").textContent =
       numberValue(d.pressTL).toFixed(1) + " hPa";
     document.getElementById("wind").textContent =
-      numberValue(d.rychlost).toFixed(1) + " km/h";
+      numberValue(d.wspeed).toFixed(1) + " km/h";
 
     document.getElementById("time").textContent =
       "Aktualizace: " + (d.datum || "--");
