@@ -74,7 +74,7 @@ async function update() {
       numberValue(d.wspeed).toFixed(1) + " km/h";
 
     document.getElementById("time").textContent =
-      "Aktualizace: " + (d.datum || "--");
+      "Aktualizováno: " + new Date().toLocaleTimeString("cs-CZ");
   } catch (e) {
     document.getElementById("time").textContent =
       "Data se nepodařilo načíst";
