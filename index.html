@@ -1,0 +1,87 @@
+
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Meteo Nová Paka</title>
+<style>
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  padding: 12px;
+  background: #172b40;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+.panel {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.item {
+  background: #29445e;
+  border-radius: 12px;
+  padding: 12px 8px;
+  text-align: center;
+}
+.name { font-size: 13px; color: #c5d9e9; }
+.value { font-size: 25px; font-weight: bold; margin-top: 7px; }
+h3 { margin: 2px 0 12px; font-size: 16px; }
+#time { font-size: 10px; color: #c5d9e9; margin-top: 12px; }
+</style>
+</head>
+<body>
+<h3>METEO NOVÁ PAKA</h3>
+<div class="panel">
+  <div class="item">
+    <div class="name">Teplota</div>
+    <div class="value" id="temp">-- °C</div>
+  </div>
+  <div class="item">
+    <div class="name">Vlhkost</div>
+    <div class="value" id="hum">-- %</div>
+  </div>
+  <div class="item">
+    <div class="name">Tlak</div>
+    <div class="value" id="press">---- hPa</div>
+  </div>
+  <div class="item">
+    <div class="name">Vítr</div>
+    <div class="value" id="wind">-- km/h</div>
+  </div>
+</div>
+<div id="time">Načítám data...</div>
+<script>
+const source = "https://pocasi.ok5aw.cz/realtimegauges.txt";
+
+function numberValue(v) {
+  return parseFloat(String(v).replace(",", "."));
+}
+async function update() {
+  try {
+    const response = await fetch(source + "?t=" + Date.now());
+    if (!response.ok) throw new Error("HTTP " + response.status);
+    const d = await response.json();
+
+    document.getElementById("temp").textContent =
+      numberValue(d.teplota).toFixed(1) + " °C";
+    document.getElementById("hum").textContent =
+      numberValue(d.hum).toFixed(0) + " %";
+    document.getElementById("press").textContent =
+      numberValue(d.pressTL).toFixed(1) + " hPa";
+    document.getElementById("wind").textContent =
+      numberValue(d.rychlost).toFixed(1) + " km/h";
+
+    document.getElementById("time").textContent =
+      "Aktualizace: " + (d.datum || "--");
+  } catch (e) {
+    document.getElementById("time").textContent =
+      "Data se nepodařilo načíst";
+  }
+}
+update();
+setInterval(update, 60000);
+</script>
+</body>
+</html>
